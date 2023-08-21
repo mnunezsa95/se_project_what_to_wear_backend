@@ -1,4 +1,5 @@
 const User = require("../models/user"); // import user model
+const NotFoundError = require("../utils/NotFoundError");
 
 module.exports.getUsers = (req, res) => {
   console.log(req);
@@ -27,7 +28,6 @@ module.exports.createUser = (req, res) => {
   User.create({ name, avatar })
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
-      console.log(err);
-      return res.status(500).send({ message: "Error" });
+      if (err.name === '')
     });
 };
