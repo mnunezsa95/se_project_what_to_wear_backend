@@ -1,5 +1,5 @@
 const User = require("../models/user"); // import user model
-const NotFoundError = require("../utils/NotFoundError");
+const NotFoundError = require("../utils/notFoundError");
 
 module.exports.getUsers = (req, res) => {
   console.log(req);
