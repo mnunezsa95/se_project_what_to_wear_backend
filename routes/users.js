@@ -1,4 +1,4 @@
-const router = require("express").router(); // import and create the router
+const router = require("express").Router(); // import and create the router
 const { getUsers, getUser, createUser } = require("../controllers/users");
 
 router.get("/", getUsers);

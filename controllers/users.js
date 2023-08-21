@@ -21,9 +21,11 @@ module.exports.getUser = (req, res) => {
 };
 
 module.exports.createUser = (req, res) => {
+  console.log(req);
+  console.log(req.body);
   const { name, avatar } = req.body;
   User.create({ name, avatar })
-    .then((user) => res.status(200).send({ user }))
+    .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
       console.log(err);
       return res.status(500).send({ message: "Error" });
