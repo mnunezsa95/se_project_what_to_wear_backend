@@ -8,7 +8,7 @@ const {
 module.exports.getUsers = (req, res) => {
   console.log(req);
   User.find({})
-    .then((users) => res.status(500).send(users))
+    .then((users) => res.status(200).send(users))
     .catch((err) => {
       console.log(err);
       if (err.name === "ValidationError") {
