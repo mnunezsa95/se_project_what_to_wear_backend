@@ -18,5 +18,4 @@ app.use((req, res, next) => {
 // set app listen at PORT
 app.listen(PORT, () => {
   console.log(`App is listening at port ${PORT}`);
-  console.log("hello");
 });

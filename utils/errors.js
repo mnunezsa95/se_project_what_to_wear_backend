@@ -1,3 +1,5 @@
+/* eslint-disable max-classes-per-file */
+
 class ValidationError extends Error {
   constructor(message) {
     super(message);
@@ -24,5 +26,3 @@ class ServerError extends Error {
     this.message = "Not Found";
   }
 }
-
-module.exports = { ValidationError, NotFoundError, ServerError };
