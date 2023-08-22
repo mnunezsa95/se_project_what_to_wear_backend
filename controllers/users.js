@@ -10,7 +10,7 @@ module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.status(200).send(users))
     .catch((err) => {
-      console.log(err);
+      console.error(err.name);
       if (err.name === "ValidationError") {
         const validationError = new ValidationError();
         return res
@@ -23,7 +23,6 @@ module.exports.getUsers = (req, res) => {
 };
 
 module.exports.getUser = (req, res) => {
-  console.log(req);
   User.findById(req.params.id)
     .orFail(() => {
       const userDoesNotExistError = new Error("This user does not exist");
@@ -33,7 +32,8 @@ module.exports.getUser = (req, res) => {
     })
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
-      if (err.name === "NotFoundError") {
+      console.error(err.name);
+      if (err.name === "NotFoundError" || err.name === "DoesNotExistError") {
         const notFoundError = new NotFoundError();
         return res.status(notFoundError.statusCode).send(notFoundError.message);
       }
@@ -43,7 +43,6 @@ module.exports.getUser = (req, res) => {
 };
 
 module.exports.createUser = (req, res) => {
-  console.log(req);
   console.log(req.body);
   const { name, avatar } = req.body;
   User.create({ name, avatar })

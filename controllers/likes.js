@@ -17,7 +17,7 @@ module.exports.updateLike = (req, res) =>
       res.status(200).send({ data: like });
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err.name);
       if (err.name === "NotFoundError") {
         const notFoundError = new NotFoundError();
         return res.status(notFoundError.statusCode).send(notFoundError.message);
@@ -42,7 +42,7 @@ module.exports.removeLike = (req, res) =>
       res.status(200).send({ data: like });
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err.name);
       if (err.name && err.name === "NotFoundError") {
         const notFoundError = new NotFoundError();
         return res.status(notFoundError.statusCode).send(notFoundError.message);
