@@ -31,7 +31,8 @@ module.exports.getUsers = (req, res) => {
 
 //! This is causing issues
 module.exports.getUser = (req, res) => {
-  User.findById(req.params._id)
+  console.log(req.params);
+  User.findById(req.params.userId)
     .orFail()
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
@@ -47,7 +48,7 @@ module.exports.getUser = (req, res) => {
           .status(notFoundError.statusCode)
           .send({ message: notFoundError.message });
       }
-      if (err.name === "ValidationError") {
+      if (err.name === "ValidationError" || err.name === "CastError") {
         const validationError = new ValidationError();
         return res
           .status(validationError.statusCode)
