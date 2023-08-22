@@ -5,45 +5,64 @@ const {
   NotFoundError,
 } = require("../utils/errors");
 
+/* ---------------------------------------------------------------------------------------------- */
+/*                                      The Code Below Works                                      */
+/* ---------------------------------------------------------------------------------------------- */
 module.exports.getUsers = (req, res) => {
   console.log(req);
   User.find({})
     .then((users) => res.status(200).send(users))
     .catch((err) => {
-      console.error(err.name);
+      console.error(
+        `Error ${err.name} with the message ${err.message} has occured while executing the code`,
+      );
       if (err.name === "ValidationError") {
         const validationError = new ValidationError();
         return res
           .status(validationError.statusCode)
-          .send(validationError.statusCode);
+          .send({ message: validationError.message });
       }
       const serverError = new ServerError();
-      return res.status(serverError.statusCode).send(serverError.statusCode);
+      return res
+        .status(serverError.statusCode)
+        .send({ message: serverError.message });
     });
 };
 
+//! This is causing issues
 module.exports.getUser = (req, res) => {
-  User.findById(req.params.id)
-    .orFail(() => {
-      const userDoesNotExistError = new Error("This user does not exist");
-      userDoesNotExistError.name = "DoesNotExistError";
-      userDoesNotExistError.statusCode = 404;
-      throw userDoesNotExistError;
-    })
+  User.findById(req.params._id)
+    .orFail()
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
       console.error(
         `Error ${err.name} with the message ${err.message} has occured while executing the code`,
       );
-      if (err.name === "NotFoundError" || err.name === "DoesNotExistError") {
+      if (
+        err.name === "NotFoundError" ||
+        err.name === "DocumentNotFoundError"
+      ) {
         const notFoundError = new NotFoundError();
-        return res.status(notFoundError.statusCode).send(notFoundError.message);
+        return res
+          .status(notFoundError.statusCode)
+          .send({ message: notFoundError.message });
+      }
+      if (err.name === "ValidationError") {
+        const validationError = new ValidationError();
+        return res
+          .status(validationError.statusCode)
+          .send({ message: validationError.message });
       }
       const serverError = new ServerError();
-      return res.status(serverError.statusCode).send(serverError.message);
+      return res
+        .status(serverError.statusCode)
+        .send({ message: serverError.message });
     });
 };
 
+/* ---------------------------------------------------------------------------------------------- */
+/*                                      The Code Below Works                                      */
+/* ---------------------------------------------------------------------------------------------- */
 module.exports.createUser = (req, res) => {
   const { name, avatar } = req.body;
   User.create({ name, avatar })
@@ -56,9 +75,11 @@ module.exports.createUser = (req, res) => {
         const validationError = new ValidationError();
         return res
           .status(validationError.statusCode)
-          .send(validationError.message);
+          .send({ message: validationError.message });
       }
       const serverError = new ServerError();
-      return res.status(serverError.statusCode).send(serverError.message);
+      return res
+        .status(serverError.statusCode)
+        .send({ message: serverError.message });
     });
 };
