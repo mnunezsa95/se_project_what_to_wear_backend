@@ -23,6 +23,8 @@ class ServerError extends Error {
     super(message);
     this.name = ServerError;
     this.statusCode = 500;
-    this.message = "Not Found";
+    this.message = "An error has occurred on the server.";
   }
 }
+
+module.exports = { ValidationError, NotFoundError, ServerError };

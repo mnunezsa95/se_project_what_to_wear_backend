@@ -23,7 +23,6 @@ module.exports.getItems = (req, res) => {
 };
 
 module.exports.createItem = (req, res) => {
-  console.log(req.user._id); // _id will become accessible
   const { name, weather, imageUrl } = req.body;
   ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
     .then((itemData) => res.status(200).send({ itemData }))
@@ -60,4 +59,9 @@ module.exports.deleteItem = (req, res) => {
       const serverError = new ServerError();
       return res.status(serverError.statusCode).send(serverError.message);
     });
+};
+
+module.exports.createClothingItem = (req, res) => {
+  console.log(req.user._id); // _id will become accessible
+  console.log(res);
 };

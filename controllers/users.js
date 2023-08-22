@@ -31,15 +31,14 @@ module.exports.getUser = (req, res) => {
       userDoesNotExistError.statusCode = 404;
       throw userDoesNotExistError;
     })
-    .then((user) => res.status(200).send(user))
+    .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
-      console.log(err);
       if (err.name === "NotFoundError") {
         const notFoundError = new NotFoundError();
         return res.status(notFoundError.statusCode).send(notFoundError.message);
       }
       const serverError = new ServerError();
-      return res.status(serverError.statusCode).send(serverError.statusCode);
+      return res.status(serverError.statusCode).send(serverError.message);
     });
 };
 

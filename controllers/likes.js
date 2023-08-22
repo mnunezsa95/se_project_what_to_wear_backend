@@ -43,7 +43,7 @@ module.exports.removeLike = (req, res) =>
     })
     .catch((err) => {
       console.log(err);
-      if (err.name === "NotFoundError") {
+      if (err.name && err.name === "NotFoundError") {
         const notFoundError = new NotFoundError();
         return res.status(notFoundError.statusCode).send(notFoundError.message);
       }
