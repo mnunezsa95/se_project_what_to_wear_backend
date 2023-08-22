@@ -32,7 +32,9 @@ module.exports.getUser = (req, res) => {
     })
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
-      console.error(err.name);
+      console.error(
+        `Error ${err.name} with the message ${err.message} has occured while executing the code`,
+      );
       if (err.name === "NotFoundError" || err.name === "DoesNotExistError") {
         const notFoundError = new NotFoundError();
         return res.status(notFoundError.statusCode).send(notFoundError.message);
@@ -43,11 +45,13 @@ module.exports.getUser = (req, res) => {
 };
 
 module.exports.createUser = (req, res) => {
-  console.log(req.body);
   const { name, avatar } = req.body;
   User.create({ name, avatar })
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
+      console.error(
+        `Error ${err.name} with the message ${err.message} has occured while executing the code`,
+      );
       if (err.name === "ValidationError") {
         const validationError = new ValidationError();
         return res
