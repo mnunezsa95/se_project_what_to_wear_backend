@@ -29,7 +29,9 @@ module.exports.getUsers = (req, res) => {
     });
 };
 
-//! This is causing issues
+/* ---------------------------------------------------------------------------------------------- */
+/*                                      The Code Below Works                                      */
+/* ---------------------------------------------------------------------------------------------- */
 module.exports.getUser = (req, res) => {
   console.log(req.params);
   User.findById(req.params.userId)

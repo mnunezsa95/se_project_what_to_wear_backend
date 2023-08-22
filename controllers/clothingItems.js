@@ -5,6 +5,11 @@ const {
   NotFoundError,
 } = require("../utils/errors");
 
+module.exports.createClothingItem = (req, res) => {
+  console.log(req.user._id); // _id will become accessible
+  console.log(res);
+};
+
 module.exports.getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.status(200).send({ data: items }))
@@ -22,13 +27,10 @@ module.exports.getItems = (req, res) => {
 };
 
 module.exports.createItem = (req, res) => {
-  console.log(req.user._id);
   const { name, weather, imageUrl } = req.body;
-  ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
-    .then((item) => {
-      console.log(item);
-      res.send({ data: item });
-    })
+  console.log(req.user);
+  ClothingItem.create({ name, weather, imageUrl, owner: req.user })
+    .then((item) => res.status(200).send({ data: item }))
     .catch((err) => {
       console.error(
         `Error ${err.name} with the message ${err.message} has occured while executing the code`,
@@ -66,9 +68,4 @@ module.exports.deleteItem = (req, res) => {
       const serverError = new ServerError();
       return res.status(serverError.statusCode).send(serverError.message);
     });
-};
-
-module.exports.createClothingItem = (req, res) => {
-  console.log(req.user._id); // _id will become accessible
-  console.log(res);
 };
