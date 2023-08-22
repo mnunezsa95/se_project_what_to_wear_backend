@@ -8,7 +8,7 @@ router.use("/users", user);
 router.use("/items", like);
 
 router.use((req, res) => {
-  res.status(300).send({ message: "No such router" });
+  res.status(300).send({ message: "There is no such router" });
 });
 
 module.exports = router;
