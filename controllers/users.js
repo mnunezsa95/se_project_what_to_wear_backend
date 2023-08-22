@@ -27,8 +27,8 @@ module.exports.getUser = (req, res) => {
   User.findById(req.params.id)
     .orFail(() => {
       const userDoesNotExistError = new Error("This user does not exist");
-      userDoesNotExistError.name("DoesNotExistError");
-      userDoesNotExistError.status(404);
+      userDoesNotExistError.name = "DoesNotExistError";
+      userDoesNotExistError.statusCode = 404;
       throw userDoesNotExistError;
     })
     .then((user) => res.status(200).send(user))
