@@ -6,9 +6,8 @@ const {
 } = require("../utils/errors");
 
 module.exports.getItems = (req, res) => {
-  console.log(req);
   ClothingItem.find({})
-    .then((items) => res.status(200).send(items))
+    .then((items) => res.status(200).send({ data: items }))
     .catch((err) => {
       console.log(err);
       if (err.name === "ValidationError") {
@@ -23,19 +22,27 @@ module.exports.getItems = (req, res) => {
 };
 
 module.exports.createItem = (req, res) => {
+  console.log(req.user._id);
   const { name, weather, imageUrl } = req.body;
   ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
-    .then((itemData) => res.status(200).send({ itemData }))
+    .then((item) => {
+      console.log(item);
+      res.send({ data: item });
+    })
     .catch((err) => {
-      console.log(err);
+      console.error(
+        `Error ${err.name} with the message ${err.message} has occured while executing the code`,
+      );
       if (err.name === "ValidationError") {
         const validationError = new ValidationError();
         return res
           .status(validationError.statusCode)
-          .send(validationError.message);
+          .send({ message: validationError.message });
       }
       const serverError = new ServerError();
-      return res.status(serverError.statusCode).send(serverError.message);
+      return res
+        .status(serverError.statusCode)
+        .send({ message: serverError.message });
     });
 };
 

@@ -11,7 +11,7 @@ const {
 module.exports.getUsers = (req, res) => {
   console.log(req);
   User.find({})
-    .then((users) => res.status(200).send(users))
+    .then((users) => res.status(200).send({ data: users }))
     .catch((err) => {
       console.error(
         `Error ${err.name} with the message ${err.message} has occured while executing the code`,
