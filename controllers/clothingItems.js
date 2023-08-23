@@ -49,7 +49,7 @@ module.exports.createItem = (req, res) => {
 };
 
 module.exports.deleteItem = (req, res) => {
-  ClothingItem.findByIdAndRemove(req.params.id)
+  ClothingItem.findByIdAndRemove(req.params.itemId)
     .orFail(() => {
       const deleteItemError = new Error(
         "The item could not be found in order to be deleted",
@@ -60,12 +60,24 @@ module.exports.deleteItem = (req, res) => {
     })
     .then((item) => res.status(200).send(item))
     .catch((err) => {
-      if (err.name === "NotFoundError") {
-        console.log(err);
+      console.error(
+        `Error ${err.name} with the message ${err.message} has occured while executing the code`,
+      );
+      if (err.name === "NotFoundError" || err.name === "DeleteItemError") {
         const notFoundError = new NotFoundError();
-        return res.status(notFoundError.statusCode).send(notFoundError.message);
+        return res
+          .status(notFoundError.statusCode)
+          .send({ message: notFoundError.message });
+      }
+      if (err.name === "ValidationError" || err.name === "CastError") {
+        const validationError = new ValidationError();
+        return res
+          .status(validationError.statusCode)
+          .send({ message: validationError.message });
       }
       const serverError = new ServerError();
-      return res.status(serverError.statusCode).send(serverError.message);
+      return res
+        .status(serverError.statusCode)
+        .send({ message: serverError.message });
     });
 };
