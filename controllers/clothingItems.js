@@ -3,6 +3,7 @@ const {
   ValidationError,
   ServerError,
   NotFoundError,
+  IdNotFoundError,
 } = require("../utils/errors");
 
 module.exports.createClothingItem = (req, res) => {
@@ -51,19 +52,15 @@ module.exports.createItem = (req, res) => {
 module.exports.deleteItem = (req, res) => {
   ClothingItem.findByIdAndRemove(req.params.itemId)
     .orFail(() => {
-      const deleteItemError = new Error(
-        "The item could not be found in order to be deleted",
-      );
-      deleteItemError.name = "DeleteItemError";
-      deleteItemError.statusCode = 404;
-      throw deleteItemError;
+      const idNotFoundError = new IdNotFoundError();
+      throw idNotFoundError;
     })
     .then((item) => res.status(200).send(item))
     .catch((err) => {
       console.error(
         `Error ${err.name} with the message ${err.message} has occured while executing the code`,
       );
-      if (err.name === "NotFoundError" || err.name === "DeleteItemError") {
+      if (err.name === "NotFoundError" || err.name === "IdNotFoundError") {
         const notFoundError = new NotFoundError();
         return res
           .status(notFoundError.statusCode)

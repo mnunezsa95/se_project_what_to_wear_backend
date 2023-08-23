@@ -3,6 +3,7 @@ const {
   ServerError,
   NotFoundError,
   ValidationError,
+  IdNotFoundError,
 } = require("../utils/errors");
 
 /* ---------------------------------------------------------------------------------------------- */
@@ -15,10 +16,8 @@ module.exports.updateLike = (req, res) => {
     { new: true },
   )
     .orFail(() => {
-      const addLikeError = new Error("No card found with that id");
-      addLikeError.name = "AddLikeError";
-      addLikeError.statusCode = 404;
-      throw addLikeError;
+      const idNotFoundError = new IdNotFoundError();
+      throw idNotFoundError;
     })
     .then((like) => {
       res.status(200).send({ data: like });
@@ -33,7 +32,7 @@ module.exports.updateLike = (req, res) => {
           .status(validationError.statusCode)
           .send({ message: validationError.message });
       }
-      if (err.name === "NotFoundError" || err.name === "AddLikeError") {
+      if (err.name === "NotFoundError" || err.name === "IdNotFoundError") {
         const notFoundError = new NotFoundError();
         return res
           .status(notFoundError.statusCode)
@@ -51,10 +50,8 @@ module.exports.removeLike = (req, res) => {
     { new: true },
   )
     .orFail(() => {
-      const removeLikeError = new Error("No card found with that id");
-      removeLikeError.name = "RemoveLikeError";
-      removeLikeError.statusCode = 404;
-      throw removeLikeError;
+      const idNotFoundError = new IdNotFoundError();
+      throw idNotFoundError;
     })
     .then((like) => {
       res.status(200).send({ data: like });
@@ -69,7 +66,7 @@ module.exports.removeLike = (req, res) => {
           .status(validationError.statusCode)
           .send({ message: validationError.message });
       }
-      if (err.name === "NotFoundError" || err.name === "RemoveLikeError") {
+      if (err.name === "NotFoundError" || err.name === "IdNotFoundError") {
         const notFoundError = new NotFoundError();
         return res
           .status(notFoundError.statusCode)

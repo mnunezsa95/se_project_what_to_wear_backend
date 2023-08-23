@@ -23,8 +23,22 @@ class ServerError extends Error {
     super(message);
     this.name = ServerError;
     this.statusCode = 500;
-    this.message = "An error has occurred on the server.";
+    this.message = "'an error has occurred on the server'";
   }
 }
 
-module.exports = { ValidationError, NotFoundError, ServerError };
+class IdNotFoundError extends Error {
+  constructor(message) {
+    super(message);
+    this.message = "'the specified id not be found'";
+    this.name = "IdNotFoundError";
+    this.statusCode = 404;
+  }
+}
+
+module.exports = {
+  ValidationError,
+  NotFoundError,
+  ServerError,
+  IdNotFoundError,
+};
