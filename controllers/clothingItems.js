@@ -15,7 +15,9 @@ module.exports.getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.status(200).send({ data: items }))
     .catch((err) => {
-      console.log(err);
+      console.error(
+        `Error ${err.name} with the message ${err.message} has occured while executing the code`,
+      );
       if (err.name === "ValidationError") {
         const validationError = new ValidationError();
         return res
