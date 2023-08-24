@@ -2,12 +2,7 @@ const ClothingItem = require("../models/clothingItem");
 const { IdNotFoundError } = require("../utils/IdNotFoundErrorClass");
 
 // import functions for handling errors
-const {
-  logError,
-  handleValidationErrors,
-  handleNotFoundErrors,
-  handleServerError,
-} = require("../utils/handleErrors");
+const { logError, handleAllErrors } = require("../utils/handleErrors");
 
 module.exports.updateLike = (req, res) => {
   ClothingItem.findByIdAndUpdate(
@@ -24,9 +19,7 @@ module.exports.updateLike = (req, res) => {
     })
     .catch((err) => {
       logError(err);
-      handleValidationErrors(err, res);
-      handleNotFoundErrors(err, res);
-      handleServerError(err, res);
+      handleAllErrors(err, res);
     });
 };
 
@@ -45,8 +38,6 @@ module.exports.removeLike = (req, res) => {
     })
     .catch((err) => {
       logError(err);
-      handleValidationErrors(err, res);
-      handleNotFoundErrors(err, res);
-      handleServerError(err, res);
+      handleAllErrors(err, res);
     });
 };

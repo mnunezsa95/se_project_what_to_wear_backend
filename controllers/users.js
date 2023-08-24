@@ -1,12 +1,7 @@
 const User = require("../models/user"); // import user model
 
 // import functions for handling errors
-const {
-  logError,
-  handleValidationErrors,
-  handleNotFoundErrors,
-  handleServerError,
-} = require("../utils/handleErrors");
+const { logError, handleAllErrors } = require("../utils/handleErrors");
 
 module.exports.getUsers = (req, res) => {
   console.log(req);
@@ -14,9 +9,7 @@ module.exports.getUsers = (req, res) => {
     .then((users) => res.send({ data: users }))
     .catch((err) => {
       logError(err);
-      handleValidationErrors(err, res);
-      handleNotFoundErrors(err, res);
-      handleServerError(err, res);
+      handleAllErrors(err, res);
     });
 };
 
@@ -27,9 +20,7 @@ module.exports.getUser = (req, res) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       logError(err);
-      handleValidationErrors(err, res);
-      handleNotFoundErrors(err, res);
-      handleServerError(err, res);
+      handleAllErrors(err, res);
     });
 };
 
@@ -39,8 +30,6 @@ module.exports.createUser = (req, res) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       logError(err);
-      handleValidationErrors(err, res);
-      handleNotFoundErrors(err, res);
-      handleServerError(err, res);
+      handleAllErrors(err, res);
     });
 };

@@ -12,13 +12,10 @@ const logError = (err) => {
   );
 };
 
-const handleValidationErrors = (err, res) => {
+const handleAllErrors = (err, res) => {
   if (err.name === "ValidationError" || err.name === "CastError") {
     return res.status(validationErrorCODE).send({ message: "Invalid User" });
   }
-};
-
-const handleNotFoundErrors = (err, res) => {
   if (err.name === "NotFoundError") {
     return res.status(notFoundErrorCODE).send({ message: "Not Found" });
   }
@@ -27,20 +24,12 @@ const handleNotFoundErrors = (err, res) => {
       .status(idNotFoundError)
       .send({ message: "'the specified id not be found'" });
   }
-};
-
-// handle any other error that includes "Error"
-const handleServerError = (err, res) => {
-  if (err.name.includes === "Error") {
-    return res
-      .status(serverErrorCODE)
-      .send({ message: "'an error has occurred on the server'" });
-  }
+  return res
+    .status(serverErrorCODE)
+    .send({ message: "'an error has occurred on the server'" });
 };
 
 module.exports = {
   logError,
-  handleValidationErrors,
-  handleNotFoundErrors,
-  handleServerError,
+  handleAllErrors,
 };

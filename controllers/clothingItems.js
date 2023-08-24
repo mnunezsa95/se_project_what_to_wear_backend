@@ -2,21 +2,14 @@ const ClothingItem = require("../models/clothingItem");
 const { IdNotFoundError } = require("../utils/IdNotFoundErrorClass");
 
 // import functions for handling errors
-const {
-  logError,
-  handleValidationErrors,
-  handleNotFoundErrors,
-  handleServerError,
-} = require("../utils/handleErrors");
+const { logError, handleAllErrors } = require("../utils/handleErrors");
 
 module.exports.getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.send({ data: items }))
     .catch((err) => {
       logError(err);
-      handleValidationErrors(err, res);
-      handleNotFoundErrors(err, res);
-      handleServerError(err, res);
+      handleAllErrors(err, res);
     });
 };
 
@@ -27,9 +20,7 @@ module.exports.createItem = (req, res) => {
     .then((item) => res.send({ data: item }))
     .catch((err) => {
       logError(err);
-      handleValidationErrors(err, res);
-      handleNotFoundErrors(err, res);
-      handleServerError(err, res);
+      handleAllErrors(err, res);
     });
 };
 
@@ -42,8 +33,6 @@ module.exports.deleteItem = (req, res) => {
     .then((item) => res.send(item))
     .catch((err) => {
       logError(err);
-      handleValidationErrors(err, res);
-      handleNotFoundErrors(err, res);
-      handleServerError(err, res);
+      handleAllErrors(err, res);
     });
 };
