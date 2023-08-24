@@ -1,6 +1,7 @@
 const ClothingItem = require("../models/clothingItem");
 const { IdNotFoundError } = require("../utils/errors");
 
+// import functions for handling errors
 const {
   logError,
   handleValidationErrors,

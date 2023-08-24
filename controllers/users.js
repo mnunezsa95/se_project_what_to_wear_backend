@@ -1,4 +1,6 @@
 const User = require("../models/user"); // import user model
+
+// import functions for handling errors
 const {
   logError,
   handleValidationErrors,
