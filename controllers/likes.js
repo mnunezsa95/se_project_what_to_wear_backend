@@ -20,7 +20,7 @@ module.exports.updateLike = (req, res) => {
       throw idNotFoundError;
     })
     .then((like) => {
-      res.status(200).send({ data: like });
+      res.send({ data: like });
     })
     .catch((err) => {
       logError(err);
@@ -41,7 +41,7 @@ module.exports.removeLike = (req, res) => {
       throw idNotFoundError;
     })
     .then((like) => {
-      res.status(200).send({ data: like });
+      res.send({ data: like });
     })
     .catch((err) => {
       logError(err);

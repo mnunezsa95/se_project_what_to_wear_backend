@@ -11,7 +11,7 @@ const {
 module.exports.getUsers = (req, res) => {
   console.log(req);
   User.find({})
-    .then((users) => res.status(200).send({ data: users }))
+    .then((users) => res.send({ data: users }))
     .catch((err) => {
       logError(err);
       handleValidationErrors(err, res);
@@ -24,7 +24,7 @@ module.exports.getUser = (req, res) => {
   console.log(req.params);
   User.findById(req.params.userId)
     .orFail()
-    .then((user) => res.status(200).send({ data: user }))
+    .then((user) => res.send({ data: user }))
     .catch((err) => {
       logError(err);
       handleValidationErrors(err, res);
@@ -36,7 +36,7 @@ module.exports.getUser = (req, res) => {
 module.exports.createUser = (req, res) => {
   const { name, avatar } = req.body;
   User.create({ name, avatar })
-    .then((user) => res.status(200).send({ data: user }))
+    .then((user) => res.send({ data: user }))
     .catch((err) => {
       logError(err);
       handleValidationErrors(err, res);
