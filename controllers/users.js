@@ -1,9 +1,10 @@
 const User = require("../models/user"); // import user model
 const {
-  ValidationError,
-  ServerError,
-  NotFoundError,
-} = require("../utils/errors");
+  logError,
+  handleValidationErrors,
+  handleNotFoundErrors,
+  handleServerError,
+} = require("../utils/handleErrors");
 
 /* ---------------------------------------------------------------------------------------------- */
 /*                                      The Code Below Works                                      */
@@ -13,19 +14,10 @@ module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.status(200).send({ data: users }))
     .catch((err) => {
-      console.error(
-        `Error ${err.name} with the message ${err.message} has occured while executing the code`,
-      );
-      if (err.name === "ValidationError") {
-        const validationError = new ValidationError();
-        return res
-          .status(validationError.statusCode)
-          .send({ message: validationError.message });
-      }
-      const serverError = new ServerError();
-      return res
-        .status(serverError.statusCode)
-        .send({ message: serverError.message });
+      logError(err);
+      handleValidationErrors(err, res);
+      handleNotFoundErrors(err, res);
+      handleServerError(err, res);
     });
 };
 
@@ -38,28 +30,10 @@ module.exports.getUser = (req, res) => {
     .orFail()
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
-      console.error(
-        `Error ${err.name} with the message ${err.message} has occured while executing the code`,
-      );
-      if (
-        err.name === "NotFoundError" ||
-        err.name === "DocumentNotFoundError"
-      ) {
-        const notFoundError = new NotFoundError();
-        return res
-          .status(notFoundError.statusCode)
-          .send({ message: notFoundError.message });
-      }
-      if (err.name === "ValidationError" || err.name === "CastError") {
-        const validationError = new ValidationError();
-        return res
-          .status(validationError.statusCode)
-          .send({ message: validationError.message });
-      }
-      const serverError = new ServerError();
-      return res
-        .status(serverError.statusCode)
-        .send({ message: serverError.message });
+      logError(err);
+      handleValidationErrors(err, res);
+      handleNotFoundErrors(err, res);
+      handleServerError(err, res);
     });
 };
 
@@ -71,18 +45,9 @@ module.exports.createUser = (req, res) => {
   User.create({ name, avatar })
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
-      console.error(
-        `Error ${err.name} with the message ${err.message} has occured while executing the code`,
-      );
-      if (err.name === "ValidationError") {
-        const validationError = new ValidationError();
-        return res
-          .status(validationError.statusCode)
-          .send({ message: validationError.message });
-      }
-      const serverError = new ServerError();
-      return res
-        .status(serverError.statusCode)
-        .send({ message: serverError.message });
+      logError(err);
+      handleValidationErrors(err, res);
+      handleNotFoundErrors(err, res);
+      handleServerError(err, res);
     });
 };
