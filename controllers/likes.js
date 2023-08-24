@@ -1,5 +1,5 @@
 const ClothingItem = require("../models/clothingItem");
-const { IdNotFoundError } = require("../utils/errors");
+const { IdNotFoundError } = require("../utils/IdNotFoundErrorClass");
 
 // import functions for handling errors
 const {

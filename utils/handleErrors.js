@@ -1,5 +1,10 @@
 /* eslint-disable consistent-return */
-const { ValidationError, ServerError, NotFoundError } = require("./errors");
+const {
+  notFoundErrorCODE,
+  idNotFoundError,
+  validationErrorCODE,
+  serverErrorCODE,
+} = require("./errors");
 
 const logError = (err) => {
   console.error(
@@ -9,33 +14,27 @@ const logError = (err) => {
 
 const handleValidationErrors = (err, res) => {
   if (err.name === "ValidationError" || err.name === "CastError") {
-    const validationError = new ValidationError();
-    return res
-      .status(validationError.statusCode)
-      .send({ message: validationError.message });
+    return res.status(validationErrorCODE).send({ message: "Invalid User" });
   }
 };
 
 const handleNotFoundErrors = (err, res) => {
-  if (
-    err.name === "NotFoundError" ||
-    err.name === "IdNotFoundError" ||
-    err.name === "DocumentNotFoundError"
-  ) {
-    const notFoundError = new NotFoundError();
+  if (err.name === "NotFoundError") {
+    return res.status(notFoundErrorCODE).send({ message: "Not Found" });
+  }
+  if (err.name === "IdNotFoundError" || err.name === "DocumentNotFoundError") {
     return res
-      .status(notFoundError.statusCode)
-      .send({ message: notFoundError.message });
+      .status(idNotFoundError)
+      .send({ message: "'the specified id not be found'" });
   }
 };
 
 // handle any other error that includes "Error"
 const handleServerError = (err, res) => {
   if (err.name.includes === "Error") {
-    const serverError = new ServerError();
     return res
-      .status(serverError.statusCode)
-      .send({ message: serverError.message });
+      .status(serverErrorCODE)
+      .send({ message: "'an error has occurred on the server'" });
   }
 };
 
