@@ -6,9 +6,6 @@ const {
   handleServerError,
 } = require("../utils/handleErrors");
 
-/* ---------------------------------------------------------------------------------------------- */
-/*                                      The Code Below Works                                      */
-/* ---------------------------------------------------------------------------------------------- */
 module.exports.getUsers = (req, res) => {
   console.log(req);
   User.find({})
@@ -21,9 +18,6 @@ module.exports.getUsers = (req, res) => {
     });
 };
 
-/* ---------------------------------------------------------------------------------------------- */
-/*                                      The Code Below Works                                      */
-/* ---------------------------------------------------------------------------------------------- */
 module.exports.getUser = (req, res) => {
   console.log(req.params);
   User.findById(req.params.userId)
@@ -37,9 +31,6 @@ module.exports.getUser = (req, res) => {
     });
 };
 
-/* ---------------------------------------------------------------------------------------------- */
-/*                                      The Code Below Works                                      */
-/* ---------------------------------------------------------------------------------------------- */
 module.exports.createUser = (req, res) => {
   const { name, avatar } = req.body;
   User.create({ name, avatar })

@@ -8,9 +8,6 @@ const {
   handleServerError,
 } = require("../utils/handleErrors");
 
-/* ---------------------------------------------------------------------------------------------- */
-/*                                           Code Works                                           */
-/* ---------------------------------------------------------------------------------------------- */
 module.exports.updateLike = (req, res) => {
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,
