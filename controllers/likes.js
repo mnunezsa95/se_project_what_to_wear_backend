@@ -1,10 +1,12 @@
 const ClothingItem = require("../models/clothingItem");
+const { IdNotFoundError } = require("../utils/errors");
+
 const {
-  ServerError,
-  NotFoundError,
-  ValidationError,
-  IdNotFoundError,
-} = require("../utils/errors");
+  logError,
+  handleValidationErrors,
+  handleNotFoundErrors,
+  handleServerError,
+} = require("../utils/handleErrors");
 
 /* ---------------------------------------------------------------------------------------------- */
 /*                                           Code Works                                           */
@@ -23,23 +25,10 @@ module.exports.updateLike = (req, res) => {
       res.status(200).send({ data: like });
     })
     .catch((err) => {
-      console.error(
-        `Error ${err.name} with the message ${err.message} has occured while executing the code`,
-      );
-      if (err.name === "ValidationError" || err.name === "CastError") {
-        const validationError = new ValidationError();
-        return res
-          .status(validationError.statusCode)
-          .send({ message: validationError.message });
-      }
-      if (err.name === "NotFoundError" || err.name === "IdNotFoundError") {
-        const notFoundError = new NotFoundError();
-        return res
-          .status(notFoundError.statusCode)
-          .send({ message: notFoundError.message });
-      }
-      const serverError = new ServerError();
-      return res.status(serverError.statusCode).send(serverError.message);
+      logError(err);
+      handleValidationErrors(err, res);
+      handleNotFoundErrors(err, res);
+      handleServerError(err, res);
     });
 };
 
@@ -57,22 +46,9 @@ module.exports.removeLike = (req, res) => {
       res.status(200).send({ data: like });
     })
     .catch((err) => {
-      console.error(
-        `Error ${err.name} with the message ${err.message} has occured while executing the code`,
-      );
-      if (err.name === "ValidationError" || err.name === "CastError") {
-        const validationError = new ValidationError();
-        return res
-          .status(validationError.statusCode)
-          .send({ message: validationError.message });
-      }
-      if (err.name === "NotFoundError" || err.name === "IdNotFoundError") {
-        const notFoundError = new NotFoundError();
-        return res
-          .status(notFoundError.statusCode)
-          .send({ message: notFoundError.message });
-      }
-      const serverError = new ServerError();
-      return res.status(serverError.statusCode).send(serverError.message);
+      logError(err);
+      handleValidationErrors(err, res);
+      handleNotFoundErrors(err, res);
+      handleServerError(err, res);
     });
 };
