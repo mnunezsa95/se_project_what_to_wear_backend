@@ -33,7 +33,7 @@ module.exports.createUser = (req, res) => {
     User.create({ name, avatar, email, password: hash })
       .then((user) => {
         console.log(user);
-        res.send({ data: user });
+        res.send({ name, avatar, email }); //! Select: false on the schema was not working
       })
       .catch((err) => {
         logError(err);
@@ -62,7 +62,8 @@ module.exports.getCurrentUser = (req, res) => {
   User.findById(userId)
     .orFail()
     .then((user) => {
-      res.status(200).send({ data: user });
+      console.log(user);
+      res.send({ data: user });
     })
     .catch((err) => {
       logError(err);

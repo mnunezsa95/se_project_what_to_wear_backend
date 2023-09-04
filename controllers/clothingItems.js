@@ -25,12 +25,27 @@ module.exports.createItem = (req, res) => {
 };
 
 module.exports.deleteItem = (req, res) => {
-  ClothingItem.findByIdAndRemove(req.params.itemId)
+  const { itemId } = req.params;
+  console.log(itemId);
+  ClothingItem.findById(itemId)
+    .orFail()
+    .then((item) => {
+      if (String(item.owner) !== req.user._id) {
+        console.log(req.user._id, item.owner);
+        Promise.reject(new Error("Cannot delete another user's post"));
+      }
+    })
+    .catch((err) => {
+      logError(err);
+      handleAllErrors(err, res);
+    });
+
+  ClothingItem.findByIdAndRemove(itemId)
     .orFail(() => {
       const idNotFoundError = new IdNotFoundError();
       throw idNotFoundError;
     })
-    .then((item) => res.send(item))
+    .then(() => res.send({ message: "item deleted" }))
     .catch((err) => {
       logError(err);
       handleAllErrors(err, res);
