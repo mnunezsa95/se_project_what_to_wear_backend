@@ -4,6 +4,7 @@ const {
   idNotFoundError,
   validationErrorCODE,
   serverErrorCODE,
+  incorrectCredentialsErrorCode,
 } = require("./errors");
 
 const logError = (err) => {
@@ -22,11 +23,16 @@ const handleAllErrors = (err, res) => {
   if (err.name === "IdNotFoundError" || err.name === "DocumentNotFoundError") {
     return res
       .status(idNotFoundError)
-      .send({ message: "'the specified id not be found'" });
+      .send({ message: "the specified id not be found" });
+  }
+  if (err.name === "IncorrectCredentialsErrorCode") {
+    return res
+      .status(incorrectCredentialsErrorCode)
+      .send({ message: "incorrect email or password" });
   }
   return res
     .status(serverErrorCODE)
-    .send({ message: "'an error has occurred on the server'" });
+    .send({ message: "an error has occurred on the server" });
 };
 
 module.exports = {
