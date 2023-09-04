@@ -5,6 +5,7 @@ const cors = require("cors"); // import cors
 const routes = require("./routes"); // import routes
 const { limiter } = require("./middlewares/rateLimiter");
 const { login, createUser } = require("./controllers/users");
+const { auth } = require("./middlewares/auth");
 
 const app = express();
 mongoose.connect("mongodb://localhost:27017/wtwr_db"); // connect to mongoDB
@@ -22,6 +23,7 @@ app.use((req, res, next) => {
 });
 app.post("/signin", login);
 app.post("/signup", createUser);
+app.use(auth);
 app.use(routes);
 
 // set app listen at PORT

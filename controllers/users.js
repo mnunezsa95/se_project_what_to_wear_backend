@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user"); // import user model
@@ -32,7 +31,10 @@ module.exports.createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
   bcrypt.hash(password, 10).then((hash) => {
     User.create({ name, avatar, email, password: hash })
-      .then((user) => res.send({ data: user }))
+      .then((user) => {
+        console.log(user);
+        res.send({ name, avatar, email });
+      })
       .catch((err) => {
         logError(err);
         handleAllErrors(err, res);
