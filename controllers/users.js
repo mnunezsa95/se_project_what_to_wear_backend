@@ -46,11 +46,10 @@ module.exports.login = (req, res) => {
   const { email, password } = req.body;
   User.findUserByCredentials(email, password)
     .then((user) => {
-      console.log(user);
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
       });
-      res.status(200).send(token);
+      res.send({ data: token });
     })
     .catch((err) => {
       logError(err);

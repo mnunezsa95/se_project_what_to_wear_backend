@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
 const {
-  IncorrectCredentialsErrorCode,
+  IncorrectCredentialsError,
 } = require("../utils/IncorrectCredentialsErrorClass");
 
 const userSchema = new mongoose.Schema({
@@ -48,15 +48,13 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(
     .select("+password")
     .then((user) => {
       if (!user) {
-        const incorrectCredentialsErrorCode =
-          new IncorrectCredentialsErrorCode();
-        throw incorrectCredentialsErrorCode;
+        const incorrectCredentialsError = new IncorrectCredentialsError();
+        throw incorrectCredentialsError;
       }
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
-          const incorrectCredentialsErrorCode =
-            new IncorrectCredentialsErrorCode();
-          throw incorrectCredentialsErrorCode;
+          const incorrectCredentialsError = new IncorrectCredentialsError();
+          throw incorrectCredentialsError;
         }
         return user;
       });

@@ -27,14 +27,14 @@ const handleAllErrors = (err, res) => {
       .send({ message: "the specified id not be found" });
   }
   if (
-    err.name === "IncorrectCredentialsErrorCode" ||
+    err.name === "IncorrectCredentialsError" ||
     err.message.includes("data and hash")
   ) {
     return res
       .status(incorrectCredentialsErrorCODE)
       .send({ message: "incorrect email or password" });
   }
-  if (err.name === "EmailAlreadyExistsErrorCODE") {
+  if (err.name === "DuplicateEmailError") {
     return res
       .status(duplicateEmailErrorCODE)
       .send({ message: "email already exists" });
