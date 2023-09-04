@@ -4,9 +4,10 @@ const {
   createItem,
   deleteItem,
 } = require("../controllers/clothingItems");
+const { auth } = require("../middlewares/auth");
 
 router.get("/", getItems); // get items
-router.post("/", createItem); // create an item
-router.delete("/:itemId", deleteItem); // delete an item
+router.post("/", auth, createItem); // create an item
+router.delete("/:itemId", auth, deleteItem); // delete an item
 
 module.exports = router;

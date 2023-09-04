@@ -5,6 +5,7 @@ const {
   validationErrorCODE,
   serverErrorCODE,
   incorrectCredentialsErrorCode,
+  emailAlreadyExistsErrorCODE,
 } = require("./errors");
 
 const logError = (err) => {
@@ -29,6 +30,11 @@ const handleAllErrors = (err, res) => {
     return res
       .status(incorrectCredentialsErrorCode)
       .send({ message: "incorrect email or password" });
+  }
+  if (err.name === "EmailAlreadyExistsErrorCODE") {
+    return res
+      .status(emailAlreadyExistsErrorCODE)
+      .send({ message: "email already exists" });
   }
   return res
     .status(serverErrorCODE)

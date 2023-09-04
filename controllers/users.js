@@ -33,7 +33,7 @@ module.exports.createUser = (req, res) => {
     User.create({ name, avatar, email, password: hash })
       .then((user) => {
         console.log(user);
-        res.send({ name, avatar, email });
+        res.send({ data: user });
       })
       .catch((err) => {
         logError(err);
@@ -46,6 +46,7 @@ module.exports.login = (req, res) => {
   const { email, password } = req.body;
   User.findUserByCredentials(email, password)
     .then((user) => {
+      console.log(user);
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
       });

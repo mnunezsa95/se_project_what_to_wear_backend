@@ -3,10 +3,11 @@ const clothingItem = require("./clothingitems");
 const user = require("./users");
 const like = require("./likes");
 const { notFoundErrorCODE } = require("../utils/errors");
+const { auth } = require("../middlewares/auth");
 
 router.use("/items", clothingItem);
-router.use("/users", user);
-router.use("/items", like);
+router.use("/users", auth, user);
+router.use("/items", auth, like);
 
 router.use((req, res) => {
   res
