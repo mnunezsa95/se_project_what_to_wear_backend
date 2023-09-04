@@ -1,11 +1,11 @@
 /* eslint-disable consistent-return */
 const {
   notFoundErrorCODE,
-  idNotFoundError,
+  idNotFoundErrorCODE,
   validationErrorCODE,
   serverErrorCODE,
-  incorrectCredentialsErrorCode,
-  emailAlreadyExistsErrorCODE,
+  incorrectCredentialsErrorCODE,
+  duplicateEmailErrorCODE,
 } = require("./errors");
 
 const logError = (err) => {
@@ -23,17 +23,20 @@ const handleAllErrors = (err, res) => {
   }
   if (err.name === "IdNotFoundError" || err.name === "DocumentNotFoundError") {
     return res
-      .status(idNotFoundError)
+      .status(idNotFoundErrorCODE)
       .send({ message: "the specified id not be found" });
   }
-  if (err.name === "IncorrectCredentialsErrorCode") {
+  if (
+    err.name === "IncorrectCredentialsErrorCode" ||
+    err.message.includes("data and hash")
+  ) {
     return res
-      .status(incorrectCredentialsErrorCode)
+      .status(incorrectCredentialsErrorCODE)
       .send({ message: "incorrect email or password" });
   }
   if (err.name === "EmailAlreadyExistsErrorCODE") {
     return res
-      .status(emailAlreadyExistsErrorCODE)
+      .status(duplicateEmailErrorCODE)
       .send({ message: "email already exists" });
   }
   return res

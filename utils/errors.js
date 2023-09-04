@@ -1,17 +1,17 @@
 // ErrorCodes
 
 const notFoundErrorCODE = 404;
-const idNotFoundError = 404;
-const incorrectCredentialsErrorCode = 401;
-const emailAlreadyExistsErrorCODE = 409;
+const idNotFoundErrorCODE = 404;
+const incorrectCredentialsErrorCODE = 401;
+const duplicateEmailErrorCODE = 409;
 const validationErrorCODE = 400;
 const serverErrorCODE = 500;
 
 module.exports = {
   notFoundErrorCODE,
-  idNotFoundError,
-  incorrectCredentialsErrorCode,
+  idNotFoundErrorCODE,
+  incorrectCredentialsErrorCODE,
   validationErrorCODE,
   serverErrorCODE,
-  emailAlreadyExistsErrorCODE,
+  duplicateEmailErrorCODE,
 };
