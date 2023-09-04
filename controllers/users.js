@@ -56,3 +56,33 @@ module.exports.login = (req, res) => {
       handleAllErrors(err, res);
     });
 };
+
+module.exports.getCurrentUser = (req, res) => {
+  const userId = req.user._id;
+  User.findById(userId)
+    .orFail()
+    .then((user) => {
+      res.status(200).send({ data: user });
+    })
+    .catch((err) => {
+      logError(err);
+      handleAllErrors(err, res);
+    });
+};
+
+module.exports.updateCurrentUser = (req, res) => {
+  const { name, avatar } = req.body;
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, avatar },
+    { new: true, runValidators: true },
+  )
+    .orFail()
+    .then((user) => {
+      res.send({ data: user });
+    })
+    .catch((err) => {
+      logError(err);
+      handleAllErrors(err, res);
+    });
+};
