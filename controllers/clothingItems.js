@@ -28,14 +28,16 @@ module.exports.deleteItem = (req, res) => {
   ClothingItem.findById(itemId)
     .orFail()
     .then((item) => {
-      if (!item.owner !== req.user._id) {
-        return res
-          .status(ERROR_403)
-          .send({ message: "cannot delete another user's post" });
+      if (item.owner.equals(req.user._id)) {
+        console.log(req.user._id);
+        console.log(item.owner);
+        return ClothingItem.findByIdAndRemove(itemId).then(() => {
+          res.send({ message: "item deleted" });
+        });
       }
-      return ClothingItem.findByIdAndRemove(itemId).then(() => {
-        res.status(200).send({ message: "item deleted" });
-      });
+      return res
+        .status(ERROR_403)
+        .send({ message: "cannot delete another user's post" });
     })
     .catch((err) => {
       logError(err);
