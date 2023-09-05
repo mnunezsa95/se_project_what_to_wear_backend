@@ -1,7 +1,6 @@
 /* eslint-disable consistent-return */
 const {
   notFoundErrorCODE,
-  idNotFoundErrorCODE,
   validationErrorCODE,
   serverErrorCODE,
   incorrectCredentialsErrorCODE,
@@ -22,13 +21,16 @@ const handleAllErrors = (err, res) => {
   if (err.name === "NotFoundError") {
     return res.status(notFoundErrorCODE).send({ message: "Not Found" });
   }
-  if (err.name === "IdNotFoundError" || err.name === "DocumentNotFoundError") {
+  if (
+    err.name === "DocumentNotFoundError" ||
+    err.message === "the specified id not found"
+  ) {
     return res
-      .status(idNotFoundErrorCODE)
-      .send({ message: "the specified id not be found" });
+      .status(notFoundErrorCODE)
+      .send({ message: "the specified id not found" });
   }
   if (
-    err.name === "IncorrectCredentialsError" ||
+    err.message === "incorrect email or password" ||
     err.message.includes("data and hash")
   ) {
     return res

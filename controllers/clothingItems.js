@@ -1,6 +1,4 @@
 const ClothingItem = require("../models/clothingItem");
-const { IdNotFoundError } = require("../utils/IdNotFoundErrorClass");
-
 // import functions for handling errors
 const { logError, handleAllErrors } = require("../utils/handleErrors");
 
@@ -37,8 +35,7 @@ module.exports.deleteItem = (req, res) => {
       }
       return ClothingItem.findByIdAndRemove(itemId)
         .orFail(() => {
-          const idNotFoundError = new IdNotFoundError();
-          throw idNotFoundError;
+          throw new Error("the specified id not found");
         })
         .then(() => res.send({ message: "item deleted" }));
     })
