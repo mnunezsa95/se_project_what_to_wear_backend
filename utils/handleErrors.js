@@ -6,6 +6,7 @@ const {
   serverErrorCODE,
   incorrectCredentialsErrorCODE,
   duplicateEmailErrorCODE,
+  forbiddenPermissionErrorCODE,
 } = require("./errors");
 
 const logError = (err) => {
@@ -38,6 +39,11 @@ const handleAllErrors = (err, res) => {
     return res
       .status(duplicateEmailErrorCODE)
       .send({ message: "email already exists" });
+  }
+  if (err.name === "ForbiddenPermissionError") {
+    return res
+      .status(forbiddenPermissionErrorCODE)
+      .send({ message: "forbidden: cannot delete another user's post" });
   }
   return res
     .status(serverErrorCODE)

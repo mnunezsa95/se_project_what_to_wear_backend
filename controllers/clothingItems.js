@@ -31,7 +31,7 @@ module.exports.deleteItem = (req, res) => {
     .orFail()
     .then((item) => {
       if (!item.owner === req.user._id) {
-        res
+        return res
           .status(403)
           .send({ message: "forbidden: cannot delete another user's post" });
       }
