@@ -14,12 +14,6 @@ const throwDuplicateError = () => {
   throw DuplicateEmailError;
 };
 
-const throwValidationError = () => {
-  const validationError = new Error("invalid user");
-  validationError.name = "ValidationError";
-  throw validationError;
-};
-
 module.exports = {
   ERROR_404,
   ERROR_401,
@@ -28,5 +22,4 @@ module.exports = {
   ERROR_403,
   ERROR_500,
   throwDuplicateError,
-  throwValidationError,
 };
