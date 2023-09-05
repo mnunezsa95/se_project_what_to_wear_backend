@@ -33,18 +33,19 @@ module.exports.createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
   User.findOne({ email })
     .then((user) => {
-      if (!email) {
-        throwValidationError();
-      }
-      if (user) {
-        throwDuplicateError();
-      }
+      if (user) throwDuplicateError();
       return bcrypt.hash(password, 10);
     })
-    .then((hash) => {
-      User.create({ name, avatar, email, password: hash }).then((user) => {
-        res.send({ name: user.name, avatar: user.avatar, email: user.amil }); //! Select: false on the schema was not working
-      });
+    .then((hash) =>
+      User.create({
+        name,
+        avatar,
+        email,
+        password: hash,
+      }),
+    )
+    .then((user) => {
+      res.send({ name: user.name, avatar: user.avatar, email: user.email });
     })
     .catch((err) => {
       logError(err);
