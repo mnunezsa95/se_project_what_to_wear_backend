@@ -3,31 +3,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user"); // import user model
 const { JWT_SECRET } = require("../utils/config");
 const { logError, handleAllErrors } = require("../utils/handleErrors");
-const {
-  throwDuplicateError,
-  throwValidationError,
-} = require("../utils/errors");
-
-module.exports.getUsers = (req, res) => {
-  console.log(req);
-  User.find({})
-    .then((users) => res.send({ data: users }))
-    .catch((err) => {
-      logError(err);
-      handleAllErrors(err, res);
-    });
-};
-
-module.exports.getUser = (req, res) => {
-  console.log(req.params);
-  User.findById(req.params.userId)
-    .orFail()
-    .then((user) => res.send({ data: user }))
-    .catch((err) => {
-      logError(err);
-      handleAllErrors(err, res);
-    });
-};
+const { throwDuplicateError } = require("../utils/errors");
 
 module.exports.createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
