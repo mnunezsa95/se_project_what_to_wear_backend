@@ -30,22 +30,18 @@ module.exports.deleteItem = (req, res) => {
   ClothingItem.findById(itemId)
     .orFail()
     .then((item) => {
-      if (String(item.owner) !== req.user._id) {
-        console.log(req.user._id, item.owner);
-        Promise.reject(new Error("Cannot delete another user's post"));
+      if (!item.owner === req.user._id) {
+        res
+          .status(403)
+          .send({ message: "forbidden: cannot delete another user's post" });
       }
+      return ClothingItem.findByIdAndRemove(itemId)
+        .orFail(() => {
+          const idNotFoundError = new IdNotFoundError();
+          throw idNotFoundError;
+        })
+        .then(() => res.send({ message: "item deleted" }));
     })
-    .catch((err) => {
-      logError(err);
-      handleAllErrors(err, res);
-    });
-
-  ClothingItem.findByIdAndRemove(itemId)
-    .orFail(() => {
-      const idNotFoundError = new IdNotFoundError();
-      throw idNotFoundError;
-    })
-    .then(() => res.send({ message: "item deleted" }))
     .catch((err) => {
       logError(err);
       handleAllErrors(err, res);
