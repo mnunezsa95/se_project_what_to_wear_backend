@@ -1,5 +1,4 @@
 const ClothingItem = require("../models/clothingItem");
-const { IdNotFoundError } = require("../utils/IdNotFoundErrorClass");
 
 // import functions for handling errors
 const { logError, handleAllErrors } = require("../utils/handleErrors");
@@ -11,8 +10,7 @@ module.exports.updateLike = (req, res) => {
     { new: true },
   )
     .orFail(() => {
-      const idNotFoundError = new IdNotFoundError();
-      throw idNotFoundError;
+      throw new Error("the specified id not found");
     })
     .then((like) => {
       res.send({ data: like });
@@ -30,8 +28,7 @@ module.exports.removeLike = (req, res) => {
     { new: true },
   )
     .orFail(() => {
-      const idNotFoundError = new IdNotFoundError();
-      throw idNotFoundError;
+      throw new Error("the specified id not found");
     })
     .then((like) => {
       res.send({ data: like });

@@ -28,7 +28,9 @@ module.exports.deleteItem = (req, res) => {
   ClothingItem.findById(itemId)
     .orFail()
     .then((item) => {
-      if (!item.owner === req.user._id) {
+      if (item.owner !== req.user._id) {
+        console.log("i", item.owner);
+        console.log("o", req.user._id);
         return res
           .status(403)
           .send({ message: "forbidden: cannot delete another user's post" });
