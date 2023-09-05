@@ -1,17 +1,32 @@
-// ErrorCodes
+/* eslint-disable camelcase */
 
-const notFoundErrorCODE = 404;
-const incorrectCredentialsErrorCODE = 401;
-const duplicateEmailErrorCODE = 409;
-const validationErrorCODE = 400;
-const forbiddenPermissionErrorCODE = 403;
-const serverErrorCODE = 500;
+// ErrorCodes
+const ERROR_404 = 404;
+const ERROR_401 = 401;
+const ERROR_409 = 409;
+const ERROR_400 = 400;
+const ERROR_403 = 403;
+const ERROR_500 = 500;
+
+const throwDuplicateError = () => {
+  const DuplicateEmailError = new Error("email already exists");
+  DuplicateEmailError.name = "DuplicateEmailError";
+  throw DuplicateEmailError;
+};
+
+const throwValidationError = () => {
+  const validationError = new Error("invalid user");
+  validationError.name = "ValidationError";
+  throw validationError;
+};
 
 module.exports = {
-  notFoundErrorCODE,
-  incorrectCredentialsErrorCODE,
-  validationErrorCODE,
-  serverErrorCODE,
-  duplicateEmailErrorCODE,
-  forbiddenPermissionErrorCODE,
+  ERROR_404,
+  ERROR_401,
+  ERROR_409,
+  ERROR_400,
+  ERROR_403,
+  ERROR_500,
+  throwDuplicateError,
+  throwValidationError,
 };

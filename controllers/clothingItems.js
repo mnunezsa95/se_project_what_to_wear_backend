@@ -1,6 +1,7 @@
 const ClothingItem = require("../models/clothingItem");
 // import functions for handling errors
 const { logError, handleAllErrors } = require("../utils/handleErrors");
+const { ERROR_403 } = require("../utils/errors");
 
 module.exports.getItems = (req, res) => {
   ClothingItem.find({})
@@ -29,17 +30,13 @@ module.exports.deleteItem = (req, res) => {
     .orFail()
     .then((item) => {
       if (item.owner !== req.user._id) {
-        console.log("i", item.owner);
-        console.log("o", req.user._id);
         return res
-          .status(403)
-          .send({ message: "forbidden: cannot delete another user's post" });
+          .status(ERROR_403)
+          .send({ message: "cannot delete another user's post" });
       }
-      return ClothingItem.findByIdAndRemove(itemId)
-        .orFail(() => {
-          throw new Error("the specified id not found");
-        })
-        .then(() => res.send({ message: "item deleted" }));
+      return ClothingItem.findByIdAndRemove(itemId).then(() =>
+        res.send({ message: "item deleted" }),
+      );
     })
     .catch((err) => {
       logError(err);

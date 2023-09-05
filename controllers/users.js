@@ -2,9 +2,11 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user"); // import user model
 const { JWT_SECRET } = require("../utils/config");
-
-// import functions for handling errors
 const { logError, handleAllErrors } = require("../utils/handleErrors");
+const {
+  throwDuplicateError,
+  throwValidationError,
+} = require("../utils/errors");
 
 module.exports.getUsers = (req, res) => {
   console.log(req);
@@ -29,17 +31,25 @@ module.exports.getUser = (req, res) => {
 
 module.exports.createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
-  bcrypt.hash(password, 10).then((hash) => {
-    User.create({ name, avatar, email, password: hash })
-      .then((user) => {
-        console.log(user);
-        res.send({ name, avatar, email }); //! Select: false on the schema was not working
-      })
-      .catch((err) => {
-        logError(err);
-        handleAllErrors(err, res);
+  User.findOne({ email })
+    .then((user) => {
+      if (!email) {
+        throwValidationError();
+      }
+      if (user) {
+        throwDuplicateError();
+      }
+      return bcrypt.hash(password, 10);
+    })
+    .then((hash) => {
+      User.create({ name, avatar, email, password: hash }).then((user) => {
+        res.send({ name: user.name, avatar: user.avatar, email: user.amil }); //! Select: false on the schema was not working
       });
-  });
+    })
+    .catch((err) => {
+      logError(err);
+      handleAllErrors(err, res);
+    });
 };
 
 module.exports.login = (req, res) => {

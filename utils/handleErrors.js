@@ -1,11 +1,13 @@
+/* eslint-disable camelcase */
 /* eslint-disable consistent-return */
+
 const {
-  notFoundErrorCODE,
-  validationErrorCODE,
-  serverErrorCODE,
-  incorrectCredentialsErrorCODE,
-  duplicateEmailErrorCODE,
-  forbiddenPermissionErrorCODE,
+  ERROR_404,
+  ERROR_401,
+  ERROR_409,
+  ERROR_400,
+  ERROR_403,
+  ERROR_500,
 } = require("./errors");
 
 const logError = (err) => {
@@ -16,17 +18,17 @@ const logError = (err) => {
 
 const handleAllErrors = (err, res) => {
   if (err.name === "ValidationError" || err.name === "CastError") {
-    return res.status(validationErrorCODE).send({ message: "Invalid User" });
+    return res.status(ERROR_400).send({ message: "invalid user" });
   }
   if (err.name === "NotFoundError") {
-    return res.status(notFoundErrorCODE).send({ message: "Not Found" });
+    return res.status(ERROR_404).send({ message: "not found" });
   }
   if (
     err.name === "DocumentNotFoundError" ||
     err.message === "the specified id not found"
   ) {
     return res
-      .status(notFoundErrorCODE)
+      .status(ERROR_404)
       .send({ message: "the specified id not found" });
   }
   if (
@@ -34,21 +36,19 @@ const handleAllErrors = (err, res) => {
     err.message.includes("data and hash")
   ) {
     return res
-      .status(incorrectCredentialsErrorCODE)
+      .status(ERROR_401)
       .send({ message: "incorrect email or password" });
   }
   if (err.name === "DuplicateEmailError") {
-    return res
-      .status(duplicateEmailErrorCODE)
-      .send({ message: "email already exists" });
+    return res.status(ERROR_409).send({ message: "email already exists" });
   }
   if (err.name === "ForbiddenPermissionError") {
     return res
-      .status(forbiddenPermissionErrorCODE)
-      .send({ message: "forbidden: cannot delete another user's post" });
+      .status(ERROR_403)
+      .send({ message: "cannot delete another user's post" });
   }
   return res
-    .status(serverErrorCODE)
+    .status(ERROR_500)
     .send({ message: "an error has occurred on the server" });
 };
 

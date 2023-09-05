@@ -15,8 +15,8 @@ app.use(limiter);
 app.use(cors());
 app.use(express.json());
 
-app.post("/signin", login);
 app.post("/signup", createUser);
+app.post("/signin", login);
 
 app.use(routes);
 
