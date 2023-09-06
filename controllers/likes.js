@@ -1,6 +1,7 @@
 const ClothingItem = require("../models/clothingItem");
 // import functions for handling errors
-const { logError, handleAllErrors } = require("../utils/handleErrors");
+const { logError, handleErrors } = require("../utils/handleErrors");
+const { throwIdNotFoundError } = require("../utils/errors");
 
 module.exports.updateLike = (req, res) => {
   ClothingItem.findByIdAndUpdate(
@@ -9,14 +10,14 @@ module.exports.updateLike = (req, res) => {
     { new: true },
   )
     .orFail(() => {
-      throw new Error("the specified id not found");
+      throwIdNotFoundError();
     })
     .then((like) => {
       res.send({ data: like });
     })
     .catch((err) => {
       logError(err);
-      handleAllErrors(err, res);
+      handleErrors(err, res);
     });
 };
 
@@ -27,13 +28,13 @@ module.exports.removeLike = (req, res) => {
     { new: true },
   )
     .orFail(() => {
-      throw new Error("the specified id not found");
+      throwIdNotFoundError();
     })
     .then((like) => {
       res.send({ data: like });
     })
     .catch((err) => {
       logError(err);
-      handleAllErrors(err, res);
+      handleErrors(err, res);
     });
 };

@@ -1,6 +1,3 @@
-/* eslint-disable camelcase */
-/* eslint-disable consistent-return */
-
 const {
   ERROR_404,
   ERROR_401,
@@ -16,17 +13,14 @@ const logError = (err) => {
   );
 };
 
-const handleAllErrors = (err, res) => {
+const handleErrors = (err, res) => {
   if (err.name === "ValidationError" || err.name === "CastError") {
     return res.status(ERROR_400).send({ message: "invalid user" });
   }
   if (err.name === "NotFoundError") {
     return res.status(ERROR_404).send({ message: "not found" });
   }
-  if (
-    err.name === "DocumentNotFoundError" ||
-    err.message === "the specified id not found"
-  ) {
+  if (err.name === "DocumentNotFoundError" || err.name === "IdNotFoundError") {
     return res
       .status(ERROR_404)
       .send({ message: "the specified id not found" });
@@ -54,5 +48,5 @@ const handleAllErrors = (err, res) => {
 
 module.exports = {
   logError,
-  handleAllErrors,
+  handleErrors,
 };

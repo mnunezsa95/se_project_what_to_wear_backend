@@ -1,5 +1,5 @@
 const ClothingItem = require("../models/clothingItem");
-const { logError, handleAllErrors } = require("../utils/handleErrors");
+const { logError, handleErrors } = require("../utils/handleErrors");
 const { ERROR_403 } = require("../utils/errors");
 
 module.exports.getItems = (req, res) => {
@@ -7,7 +7,7 @@ module.exports.getItems = (req, res) => {
     .then((items) => res.send({ data: items }))
     .catch((err) => {
       logError(err);
-      handleAllErrors(err, res);
+      handleErrors(err, res);
     });
 };
 
@@ -18,7 +18,7 @@ module.exports.createItem = (req, res) => {
     .then((item) => res.send({ data: item }))
     .catch((err) => {
       logError(err);
-      handleAllErrors(err, res);
+      handleErrors(err, res);
     });
 };
 
@@ -41,6 +41,6 @@ module.exports.deleteItem = (req, res) => {
     })
     .catch((err) => {
       logError(err);
-      handleAllErrors(err, res);
+      handleErrors(err, res);
     });
 };

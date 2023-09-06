@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user"); // import user model
 const { JWT_SECRET } = require("../utils/config");
-const { logError, handleAllErrors } = require("../utils/handleErrors");
+const { logError, handleErrors } = require("../utils/handleErrors");
 const { throwDuplicateError } = require("../utils/errors");
 
 module.exports.createUser = (req, res) => {
@@ -25,7 +25,7 @@ module.exports.createUser = (req, res) => {
     })
     .catch((err) => {
       logError(err);
-      handleAllErrors(err, res);
+      handleErrors(err, res);
     });
 };
 
@@ -40,7 +40,7 @@ module.exports.login = (req, res) => {
     })
     .catch((err) => {
       logError(err);
-      handleAllErrors(err, res);
+      handleErrors(err, res);
     });
 };
 
@@ -54,7 +54,7 @@ module.exports.getCurrentUser = (req, res) => {
     })
     .catch((err) => {
       logError(err);
-      handleAllErrors(err, res);
+      handleErrors(err, res);
     });
 };
 
@@ -71,6 +71,6 @@ module.exports.updateCurrentUser = (req, res) => {
     })
     .catch((err) => {
       logError(err);
-      handleAllErrors(err, res);
+      handleErrors(err, res);
     });
 };
