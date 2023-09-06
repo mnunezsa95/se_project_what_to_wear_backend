@@ -1,23 +1,15 @@
 // ErrorCodes
-const ERROR_404 = 404;
-const ERROR_401 = 401;
-const ERROR_409 = 409;
-const ERROR_400 = 400;
-const ERROR_403 = 403;
-const ERROR_500 = 500;
+const ERROR_404 = 404; // not found
+const ERROR_401 = 401; // authorization
+const ERROR_409 = 409; // incorrect credentials
+const ERROR_400 = 400; // validation
+const ERROR_403 = 403; // forbidden permission
+const ERROR_500 = 500; // server error
 
 const throwDuplicateError = () => {
   const duplicateEmailError = new Error("email already exists");
   duplicateEmailError.name = "DuplicateEmailError";
   throw duplicateEmailError;
-};
-
-const throwForbiddenPermissionError = () => {
-  const forbiddenPermissionError = new Error(
-    "cannot delete another user's post",
-  );
-  forbiddenPermissionError.name = "ForbiddenPermissionError";
-  throw forbiddenPermissionError;
 };
 
 const throwIdNotFoundError = () => {
@@ -34,6 +26,5 @@ module.exports = {
   ERROR_403,
   ERROR_500,
   throwDuplicateError,
-  throwForbiddenPermissionError,
   throwIdNotFoundError,
 };

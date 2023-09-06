@@ -25,6 +25,9 @@ const handleErrors = (err, res) => {
       .status(ERROR_404)
       .send({ message: "the specified id not found" });
   }
+  if (err.name === "DuplicateEmailError") {
+    return res.status(ERROR_409).send({ message: "email already exists" });
+  }
   if (
     err.message === "incorrect email or password" ||
     err.message.includes("data and hash")
@@ -33,10 +36,7 @@ const handleErrors = (err, res) => {
       .status(ERROR_401)
       .send({ message: "incorrect email or password" });
   }
-  if (err.name === "DuplicateEmailError") {
-    return res.status(ERROR_409).send({ message: "email already exists" });
-  }
-  if (err.name === "ForbiddenPermissionError") {
+  if (err.message === "cannot delete another user's post") {
     return res
       .status(ERROR_403)
       .send({ message: "cannot delete another user's post" });

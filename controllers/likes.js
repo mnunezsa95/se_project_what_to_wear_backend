@@ -1,5 +1,4 @@
 const ClothingItem = require("../models/clothingItem");
-// import functions for handling errors
 const { logError, handleErrors } = require("../utils/handleErrors");
 const { throwIdNotFoundError } = require("../utils/errors");
 
