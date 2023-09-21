@@ -17,7 +17,6 @@ app.use(express.json());
 
 app.post("/signup", createUser);
 app.post("/signin", login);
-
 app.use(routes);
 
 // set app listen at PORT
