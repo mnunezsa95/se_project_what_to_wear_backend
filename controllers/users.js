@@ -50,7 +50,7 @@ module.exports.getCurrentUser = (req, res) => {
     .orFail()
     .then((user) => {
       console.log(user);
-      res.send({ data: user });
+      res.send(user);
     })
     .catch((err) => {
       logError(err);
