@@ -4,7 +4,7 @@ const { ERROR_403 } = require("../utils/errors");
 
 module.exports.getItems = (req, res) => {
   ClothingItem.find({})
-    .then((items) => res.send({ data: items }))
+    .then((items) => res.send(items))
     .catch((err) => {
       logError(err);
       handleErrors(err, res);
@@ -15,7 +15,7 @@ module.exports.createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
   console.log(req.user);
   ClothingItem.create({ name, weather, imageUrl, owner: req.user })
-    .then((item) => res.send({ data: item }))
+    .then((item) => res.send(item))
     .catch((err) => {
       logError(err);
       handleErrors(err, res);
@@ -23,6 +23,7 @@ module.exports.createItem = (req, res) => {
 };
 
 module.exports.deleteItem = (req, res) => {
+  console.log(req.params);
   const { itemId } = req.params;
   console.log(itemId);
   ClothingItem.findById(itemId)
