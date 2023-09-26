@@ -67,7 +67,7 @@ module.exports.updateCurrentUser = (req, res) => {
   )
     .orFail()
     .then((user) => {
-      res.send({ data: user });
+      res.send(user);
     })
     .catch((err) => {
       logError(err);
