@@ -8,12 +8,8 @@ module.exports.updateLike = (req, res) => {
     { $addToSet: { likes: req.user._id } }, // add _id to the array if it's not there yet
     { new: true },
   )
-    .orFail(() => {
-      throwIdNotFoundError();
-    })
-    .then((like) => {
-      res.send({ data: like });
-    })
+    .orFail(() => throwIdNotFoundError())
+    .then((item) => res.send({ item }))
     .catch((err) => {
       logError(err);
       handleErrors(err, res);
@@ -26,12 +22,8 @@ module.exports.removeLike = (req, res) => {
     { $pull: { likes: req.user._id } }, // remove _id from the array
     { new: true },
   )
-    .orFail(() => {
-      throwIdNotFoundError();
-    })
-    .then((like) => {
-      res.send({ data: like });
-    })
+    .orFail(() => throwIdNotFoundError())
+    .then((item) => res.send({ item }))
     .catch((err) => {
       logError(err);
       handleErrors(err, res);

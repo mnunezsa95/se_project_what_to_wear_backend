@@ -30,8 +30,6 @@ module.exports.deleteItem = (req, res) => {
     .orFail()
     .then((item) => {
       if (item.owner.equals(req.user._id)) {
-        console.log(req.user._id);
-        console.log(item.owner);
         return ClothingItem.findByIdAndRemove(itemId).then(() => {
           res.send({ message: "item deleted" });
         });
