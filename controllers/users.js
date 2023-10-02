@@ -3,13 +3,16 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user"); // import user model
 const { JWT_SECRET } = require("../utils/config");
 const { logError, handleErrors } = require("../utils/handleErrors");
-const { throwDuplicateError } = require("../utils/errors");
+const { UnauthorizedError } = require("../Errors/UnauthorizedError");
+const { ConflictError } = require("../Errors/ConflictError");
+const { BadRequestError } = require("../Errors/BadRequestError");
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
   User.findOne({ email })
     .then((user) => {
-      if (user) throwDuplicateError();
+      if (user)
+        throw new ConflictError("a user with this email already exists");
       return bcrypt.hash(password, 10);
     })
     .then((hash) =>
@@ -24,12 +27,12 @@ module.exports.createUser = (req, res) => {
       res.send({ name: user.name, avatar: user.avatar, email: user.email });
     })
     .catch((err) => {
-      logError(err);
-      handleErrors(err, res);
+      if (err.name === "ConflictError") next(err);
+      next(new BadRequestError("invalid data"));
     });
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   User.findUserByCredentials(email, password)
     .then((user) => {
@@ -38,9 +41,8 @@ module.exports.login = (req, res) => {
       });
       res.send({ token });
     })
-    .catch((err) => {
-      logError(err);
-      handleErrors(err, res);
+    .catch(() => {
+      next(new UnauthorizedError("incorrect email or password"));
     });
 };
 
