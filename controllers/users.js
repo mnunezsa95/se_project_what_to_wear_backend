@@ -2,10 +2,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user"); // import user model
 const { JWT_SECRET } = require("../utils/config");
-const { logError, handleErrors } = require("../utils/handleErrors");
 const { UnauthorizedError } = require("../Errors/UnauthorizedError");
 const { ConflictError } = require("../Errors/ConflictError");
 const { BadRequestError } = require("../Errors/BadRequestError");
+const { NotFoundError } = require("../Errors/NotFoundError");
 
 module.exports.createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
@@ -41,35 +41,32 @@ module.exports.login = (req, res, next) => {
       });
       res.send({ token });
     })
-    .catch(() => {
-      next(new UnauthorizedError("incorrect email or password"));
-    });
+    .catch(() => next(new UnauthorizedError("incorrect email or password")));
 };
 
-module.exports.getCurrentUser = (req, res) => {
+module.exports.getCurrentUser = (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId)
     .orFail()
     .then((user) => res.send(user))
-    .catch((err) => {
-      logError(err);
-      handleErrors(err, res);
+    .catch(() => {
+      next(new NotFoundError("a user with the specified id not found"));
     });
 };
 
-module.exports.updateCurrentUser = (req, res) => {
+module.exports.updateCurrentUser = (req, res, next) => {
   const { name, avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
     { name, avatar },
     { new: true, runValidators: true },
   )
-    .orFail()
-    .then((user) => {
-      res.send(user);
+    .orFail(() => {
+      throw new NotFoundError("a user with the specified id not found");
     })
+    .then((user) => res.send(user))
     .catch((err) => {
-      logError(err);
-      handleErrors(err, res);
+      if (err.name === "NotFoundError") next(err);
+      next(new BadRequestError("invalid data"));
     });
 };
