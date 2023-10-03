@@ -6,6 +6,7 @@ const routes = require("./routes"); // import routes
 const { limiter } = require("./middlewares/rateLimiter");
 const { login, createUser } = require("./controllers/users");
 const { errorHandler } = require("./middlewares/errorHandler");
+const { errors } = require("celebrate");
 
 const app = express();
 mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db"); // connect to mongoDB
@@ -19,6 +20,7 @@ app.use(express.json());
 app.post("/signup", createUser);
 app.post("/signin", login);
 app.use(routes);
+app.use(errors);
 app.use(errorHandler);
 
 // set app listen at PORT
