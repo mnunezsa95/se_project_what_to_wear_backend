@@ -2,11 +2,11 @@ const express = require("express"); // import express
 const mongoose = require("mongoose"); // import mongoose
 const helmet = require("helmet"); // import helmet (security package)
 const cors = require("cors"); // import cors
+const { errors } = require("celebrate");
 const routes = require("./routes"); // import routes
 const { limiter } = require("./middlewares/rateLimiter");
 const { login, createUser } = require("./controllers/users");
 const { errorHandler } = require("./middlewares/errorHandler");
-const { errors } = require("celebrate");
 
 const app = express();
 mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db"); // connect to mongoDB
