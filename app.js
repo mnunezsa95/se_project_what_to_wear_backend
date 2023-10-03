@@ -20,7 +20,7 @@ app.use(express.json());
 app.post("/signup", createUser);
 app.post("/signin", login);
 app.use(routes);
-app.use(errors);
+app.use(errors());
 app.use(errorHandler);
 
 // set app listen at PORT
