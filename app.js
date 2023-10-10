@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express"); // import express
 const mongoose = require("mongoose"); // import mongoose
 const helmet = require("helmet"); // import helmet (security package)
