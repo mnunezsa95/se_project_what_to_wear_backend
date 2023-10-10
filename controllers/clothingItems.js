@@ -6,9 +6,7 @@ const { NotFoundError } = require("../Errors/NotFoundError");
 module.exports.getItems = (req, res, next) => {
   ClothingItem.find({})
     .then((items) => res.send(items))
-    .catch(() => {
-      next(new NotFoundError("not found"));
-    });
+    .catch((err) => next(err));
 };
 
 module.exports.createItem = (req, res, next) => {
@@ -16,8 +14,12 @@ module.exports.createItem = (req, res, next) => {
   console.log(req.user);
   ClothingItem.create({ name, weather, imageUrl, owner: req.user })
     .then((item) => res.send(item))
-    .catch(() => {
-      next(new BadRequestError("invalid data"));
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        next(new BadRequestError("invalid data"));
+      } else {
+        next(err);
+      }
     });
 };
 
@@ -38,8 +40,10 @@ module.exports.deleteItem = (req, res, next) => {
       throw new ForbiddenError("cannot delete another user's post");
     })
     .catch((err) => {
-      if (err.name === "NotFoundError") next(err);
-      if (err.name === "ForbiddenError") next(err);
-      next(new BadRequestError("invalid data"));
+      if (err.name === "CastError") {
+        next(new BadRequestError("invalid data"));
+      } else {
+        next(err);
+      }
     });
 };

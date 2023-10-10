@@ -1,7 +1,8 @@
-const router = require("express").Router(); // import and create the router
+const router = require("express").Router();
 const { updateLike, removeLike } = require("../controllers/likes");
+const { validateId } = require("../middlewares/validation");
 
-router.put("/:itemId/likes", updateLike); // like an item
-router.delete("/:itemId/likes", removeLike); // unlike an item
+router.put("/:itemId/likes", validateId, updateLike);
+router.delete("/:itemId/likes", validateId, removeLike);
 
 module.exports = router;

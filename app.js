@@ -9,6 +9,10 @@ const { limiter } = require("./middlewares/rateLimiter");
 const { login, createUser } = require("./controllers/users");
 const { errorHandler } = require("./middlewares/errorHandler");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
+const {
+  validateUserSignup,
+  validateLogin,
+} = require("./middlewares/validation");
 
 const app = express();
 mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db"); // connect to mongoDB
@@ -26,8 +30,8 @@ app.get("/crash-test", () => {
   }, 0);
 });
 
-app.post("/signup", createUser);
-app.post("/signin", login);
+app.post("/signup", validateUserSignup, createUser);
+app.post("/signin", validateLogin, login);
 app.use(routes);
 app.use(errorLogger);
 app.use(errors());

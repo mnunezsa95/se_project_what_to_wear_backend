@@ -28,7 +28,11 @@ module.exports.createUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === "ConflictError") next(err);
-      next(new BadRequestError("invalid data"));
+      if (err.name === "ValidationError") {
+        next(new BadRequestError("invalid data"));
+      } else {
+        next(err);
+      }
     });
 };
 
@@ -49,8 +53,8 @@ module.exports.getCurrentUser = (req, res, next) => {
   User.findById(userId)
     .orFail()
     .then((user) => res.send(user))
-    .catch(() => {
-      next(new NotFoundError("a user with the specified id not found"));
+    .catch((err) => {
+      next(err);
     });
 };
 
@@ -67,6 +71,10 @@ module.exports.updateCurrentUser = (req, res, next) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === "NotFoundError") next(err);
-      next(new BadRequestError("invalid data"));
+      if (err.name === "ValidationError") {
+        next(new BadRequestError("invalid data"));
+      } else {
+        next(err);
+      }
     });
 };
