@@ -13,7 +13,6 @@ module.exports.updateLike = (req, res, next) => {
     })
     .then((item) => res.send({ item }))
     .catch((err) => {
-      if (err.name === "NotFoundError") next(err);
       if (err.name === "CastError") {
         next(new BadRequestError("invalid data"));
       } else {
@@ -33,7 +32,6 @@ module.exports.removeLike = (req, res, next) => {
     })
     .then((item) => res.send({ item }))
     .catch((err) => {
-      if (err.name === "NotFoundError") next(err);
       if (err.name === "CastError") {
         next(new BadRequestError("invalid data"));
       } else {

@@ -27,7 +27,6 @@ module.exports.createUser = (req, res, next) => {
       res.send({ name: user.name, avatar: user.avatar, email: user.email });
     })
     .catch((err) => {
-      if (err.name === "ConflictError") next(err);
       if (err.name === "ValidationError") {
         next(new BadRequestError("invalid data"));
       } else {
@@ -70,7 +69,6 @@ module.exports.updateCurrentUser = (req, res, next) => {
     })
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === "NotFoundError") next(err);
       if (err.name === "ValidationError") {
         next(new BadRequestError("invalid data"));
       } else {
