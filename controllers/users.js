@@ -8,6 +8,7 @@ const { BadRequestError } = require("../Errors/BadRequestError");
 const { NotFoundError } = require("../Errors/NotFoundError");
 
 module.exports.createUser = (req, res, next) => {
+  console.log(req);
   const { name, avatar, email, password } = req.body;
   User.findOne({ email })
     .then((user) => {
